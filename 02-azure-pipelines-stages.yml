@@ -19,19 +19,31 @@ stages:
     - bash: echo $(Build.BuildId)
     - bash: echo $(Build.SourcesBranchName)
     - bash: echo $(Build.SourcesDirectory)
+    - bash: echo $(Build.ArtifactStagingDirectory)
     - bash: ls -R $(System.DefaultWorkingDirectory)
-  - job: SecondJob
-    steps:
-    - bash: echo Build FirstJob
-- stage: DevDeploy
-  variables:
-   enviroment: Dev
-  dependsOn: Build
-  jobs:
-  - job: DevDeployJob
-    steps:
-    - bash: echo $(enviroment) DevDeploy
-    - bash: echo $(Build.BuildNumber) DevDeploy
+    - bash: java -version
+    - bash: node --version
+    - bash: python --version
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+          **/*.yaml
+          **/*.tf
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - bash: ls -R $(System.DefaultWorkingDirectory)
+  # - job: SecondJob
+  #   steps:
+  #   - bash: echo Build FirstJob
+# - stage: DevDeploy
+#   variables:
+#    enviroment: Dev
+#   dependsOn: Build
+#   jobs:
+#   - job: DevDeployJob
+#     steps:
+#     - bash: echo $(enviroment) DevDeploy
+#     - bash: echo $(Build.BuildNumber) DevDeploy
 # - stage: QADeploy
 #   dependsOn: Build
 #   jobs:
