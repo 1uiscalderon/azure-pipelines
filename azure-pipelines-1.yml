@@ -1,0 +1,16 @@
+trigger:
+- master
+
+strategy:
+  matrix:
+    linux:
+      operatinSystem: 'ubuntu-latest'
+    mac:
+      operatinSystem: 'macos-latest'
+
+pool:
+  vmImage: $(operatingSystem)
+
+steps:
+- script: echo code runing on $(operatingSystem)
+  displayName: 'Run a one-line script'
